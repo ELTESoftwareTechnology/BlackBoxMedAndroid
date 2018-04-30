@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">BlackBoxMed</string>
+    <string name="no_fields">Missing fields</string>
+
+    <string name="url_login">https://api.admin.medicalbox.online/api/auth/signin</string>
+    <string name="url_register">https://api.admin.medicalbox.online/api/auth/signup</string>
+    <string name="url_getdata">https://api.admin.medicalbox.online/api/chunk/query</string>
+    <string name="url_getdoctors">https://api.admin.medicalbox.online/api/doctor/list</string>
+    <string name="url_senddata">https://api.admin.medicalbox.online/api/chunk/upload</string>
+    <string name="canceled_request">Request canceled</string>
+    <string name="choose_doctor">Current doctor: </string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="home_icon">home icon</string>
+    <string name="choose_a_doctor">Choose a doctor</string>
+    <string name="your_measurements">Your measurements</string>
+</resources>

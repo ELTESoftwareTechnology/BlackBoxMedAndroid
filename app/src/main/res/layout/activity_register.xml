@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.ActivityRegister">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:gravity="center"
+            android:layout_marginBottom="16dp"
+            android:text="Register"
+            android:textSize="24dp" />
+
+        <EditText
+        android:id="@+id/regUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/regPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/regName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/regSurname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/regEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/regSendRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_margin="4dp"
+        android:padding="4dp"
+        android:textColor="@android:color/white"
+        android:text="Register"/>
+
+    <TextView
+        android:id="@+id/regGoToLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Already registered? Login here" />
+
+</LinearLayout>
+<include layout="@layout/loading_bg"/>
+</RelativeLayout>

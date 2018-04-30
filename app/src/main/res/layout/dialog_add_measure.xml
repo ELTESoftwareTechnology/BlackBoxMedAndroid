@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txt_dia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="Add measurement:"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/in_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="Type (all lowercase)" />
+
+        <EditText
+            android:id="@+id/in_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="Value" />
+
+        <EditText
+            android:id="@+id/in_units"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:hint="Units (all lowercase)" />
+
+        <EditText
+            android:id="@+id/in_date"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Date (yyyy-mm-dd)" />
+
+        <EditText
+            android:id="@+id/in_time"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Time (HH:mm)" />
+
+        <Button
+            android:id="@+id/in_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:text="Add"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

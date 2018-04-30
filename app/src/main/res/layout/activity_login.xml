@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".Activities.ActivityLogin">
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:padding="4dp"
+            android:text="BlackBoxMed"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/loginUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/loginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/loginSendRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@color/colorPrimary"
+            android:text="Login"
+            android:padding="4dp"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/loginGoToReg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Not registered? Do it here!" />
+    </LinearLayout>
+    <include layout="@layout/loading_bg"/>
+
+</RelativeLayout>
