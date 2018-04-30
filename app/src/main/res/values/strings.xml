@@ -13,4 +13,14 @@
     <string name="home_icon">home icon</string>
     <string name="choose_a_doctor">Choose a doctor</string>
     <string name="your_measurements">Your measurements</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="register">Register</string>
+    <string name="already_registered_login_here">Already registered? Login here</string>
+    <string name="blackboxmed">BlackBoxMed</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="not_registered_do_it_here">Not registered? Do it here!</string>
 </resources>

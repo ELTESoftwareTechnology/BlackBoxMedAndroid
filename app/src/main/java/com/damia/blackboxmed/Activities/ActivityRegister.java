@@ -123,7 +123,6 @@ public class ActivityRegister extends AppCompatActivity {
                             {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    //String err = error.sub
                                     Toast.makeText(ActivityRegister.this, error.toString(), Toast.LENGTH_SHORT).show();
                                     System.out.println(error);
                                     spinnerbg.setVisibility(View.GONE);

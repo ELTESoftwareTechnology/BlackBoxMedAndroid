@@ -107,7 +107,7 @@ public class ActivityHome extends AppCompatActivity {
 
         session = PreferenceManager.getDefaultSharedPreferences(ActivityHome.this);
         doctorUsername = session.getString("doctorUsernamePref", "");
-        savedPubKey = "MCowBQYDK2VwAyEAt75fQ6Ji2Aq9VcdkeqS/2XppuXouSRPUd/Vj8R5T2yk=";//session.getString("pubKeyPref", "");//
+        savedPubKey = "MCowBQYDK2VwAyEAt75fQ6Ji2Aq9VcdkeqS/2XppuXouSRPUd/Vj8R5T2yk=";//session.getString("pubKeyPref", "");  <---change to this
         savedUsername = session.getString("usernamePref", "");
         token = session.getString("tokenPref", "");
 
@@ -174,6 +174,7 @@ public class ActivityHome extends AppCompatActivity {
 
     }
 
+    //get the data from the db to the adapter
     public void displayData(){
         DBSQLiteHelper database = new DBSQLiteHelper(this);
         measures.clear();
@@ -184,6 +185,7 @@ public class ActivityHome extends AppCompatActivity {
         spinnerbg.setVisibility(View.GONE);
     }
 
+    //send POST request
     public void sendData() {
         postRequest = new StringRequest(Request.Method.POST, getString(R.string.url_senddata),
                 new Response.Listener<String>()
@@ -233,11 +235,13 @@ public class ActivityHome extends AppCompatActivity {
 
     }
 
+
     public String escapeJsonCharacter(String jsonToEncode){
-        String encodedJson = jsonToEncode.replaceAll("\"", "\\\"");
+        String encodedJson = jsonToEncode.replaceAll("\"", "\\"+"\"");
         return encodedJson;
     }
 
+    //std encryption function
     private static byte[] encryptData (String messageToEncrypt, VirgilPublicKey receiverPublicKey)
             throws EncryptionException {
 
@@ -246,6 +250,7 @@ public class ActivityHome extends AppCompatActivity {
         return crypto.encrypt(dataToEncrypt, receiverPublicKey);
     }
 
+    //get measures and structure the json to send
     public String encryptAndParseData (ArrayList<Measurement> measurements) {
         String start = "{ \"targetUsername\":\""+doctorUsername+"\",";
         String me_start = "\"encryptedData\":\"";
@@ -264,7 +269,7 @@ public class ActivityHome extends AppCompatActivity {
         try {
             byte[] encryptedData = (encryptData(string_convertedMeasures, pubKey));
             String contentToEscape = new String(encryptedData, "ISO-8859-1");
-            content = new String(encryptedData, "ISO-8859-1");// escapeJsonCharacter(contentToEscape);
+            content = escapeJsonCharacter(contentToEscape);
         } catch (Exception e) {
             
             System.err.println(e);

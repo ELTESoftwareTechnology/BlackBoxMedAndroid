@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +51,8 @@ public class ActivitySettings extends AppCompatActivity {
     String pubKey;
     String username;
 
+    RelativeLayout spinnerbg;
+
     SharedPreferences session;
     SharedPreferences.Editor editor;
 
@@ -71,6 +74,10 @@ public class ActivitySettings extends AppCompatActivity {
         btnHome = findViewById(R.id.btnHome);
         btnLogout = findViewById(R.id.btnLogout);
         current_doc = findViewById(R.id.current_doctor);
+
+
+        spinnerbg = (RelativeLayout)findViewById(R.id.spinnerbg);
+        spinnerbg.setVisibility(View.VISIBLE);
 
         if("".equals(session.getString("doctorNamePref", ""))){
             current_doc.setText("No doctor selected, choose one!");
@@ -142,7 +149,8 @@ public class ActivitySettings extends AppCompatActivity {
                 new Response.Listener<JSONArray>()
                 {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONArray response) {;
+                        spinnerbg.setVisibility(View.GONE);
                         try {
 
                             for(int i=0; i<response.length(); i++){
