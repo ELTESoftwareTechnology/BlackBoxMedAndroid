@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -21,27 +20,25 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.damia.blackboxmed.Helper.AdapterDoctors;
+import com.damia.blackboxmed.Helper.DoctorsAdapter;
 import com.damia.blackboxmed.Helper.Doctor;
 import com.damia.blackboxmed.R;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActivitySettings extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     ImageButton btnHome;
     ImageButton btnLogout;
 
     ListView dl;
     ArrayList<Doctor> doctors;
-    private static AdapterDoctors adapterDoctors;
+    private static DoctorsAdapter adapterDoctors;
 
     TextView current_doc;
     String savedToken;
@@ -63,12 +60,12 @@ public class ActivitySettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        session = PreferenceManager.getDefaultSharedPreferences(ActivitySettings.this);
+        session = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
         savedToken = session.getString("tokenPref", "");
 
         queue = Volley.newRequestQueue(this);
         doctors = new ArrayList<>();
-        adapterDoctors = new AdapterDoctors(doctors, ActivitySettings.this);
+        adapterDoctors = new DoctorsAdapter(doctors, SettingsActivity.this);
 
         dl = findViewById(R.id.doctors_list);
         btnHome = findViewById(R.id.btnHome);
@@ -91,7 +88,7 @@ public class ActivitySettings extends AppCompatActivity {
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentSettings = new Intent(getApplicationContext(), ActivityHome.class);
+                Intent intentSettings = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intentSettings);
             }
         });
@@ -99,20 +96,20 @@ public class ActivitySettings extends AppCompatActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new android.app.AlertDialog.Builder(ActivitySettings.this)
+                new android.app.AlertDialog.Builder(SettingsActivity.this)
                         .setTitle("Logout")
                         .setMessage("Are you sure?")
                         .setNegativeButton(android.R.string.no, null)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface arg0, int arg1) {
-                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ActivitySettings.this);
+                                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.clear();
                                 editor.commit();
                                 finish();
 
-                                Intent intentLogout = new Intent(ActivitySettings.this, ActivityLogin.class)
+                                Intent intentLogout = new Intent(SettingsActivity.this, LoginActivity.class)
                                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                                 intentLogout.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -138,7 +135,7 @@ public class ActivitySettings extends AppCompatActivity {
                 editor.apply();
                 editor.commit();
                 current_doc.setText(getString(R.string.choose_doctor)+" "+session.getString("doctorNamePref", ""));
-                Toast.makeText(ActivitySettings.this, "Doctor changed, current: "+d.getFirstName()+" "+d.getLastName(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, "Doctor changed, current: "+d.getFirstName()+" "+d.getLastName(), Toast.LENGTH_SHORT).show();
 
             }
         });

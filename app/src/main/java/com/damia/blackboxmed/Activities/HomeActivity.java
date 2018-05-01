@@ -1,35 +1,26 @@
 package com.damia.blackboxmed.Activities;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.damia.blackboxmed.Helper.AdapterData;
+import com.damia.blackboxmed.Helper.DataAdapter;
 import com.damia.blackboxmed.Helper.AddDialogClass;
-import com.damia.blackboxmed.Helper.DBMeasurements;
 import com.damia.blackboxmed.Helper.DBSQLiteHelper;
 import com.damia.blackboxmed.Helper.Measurement;
 import com.damia.blackboxmed.R;
@@ -37,22 +28,13 @@ import com.virgilsecurity.sdk.crypto.VirgilCrypto;
 import com.virgilsecurity.sdk.crypto.VirgilPublicKey;
 import com.virgilsecurity.sdk.crypto.exceptions.CryptoException;
 import com.virgilsecurity.sdk.crypto.exceptions.EncryptionException;
-import com.virgilsecurity.sdk.utils.Base64;
 import com.virgilsecurity.sdk.utils.ConvertionUtils;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActivityHome extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
     //shared pref variables
     SharedPreferences session;
@@ -70,7 +52,7 @@ public class ActivityHome extends AppCompatActivity {
     ImageButton btnSettings;
     ImageButton btnCloseRequest;
     ListView ml;
-    AdapterData adapterData;
+    DataAdapter adapterData;
     RelativeLayout spinnerbg;
 
     //measurement data
@@ -97,7 +79,7 @@ public class ActivityHome extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
         spinnerbg = findViewById(R.id.spinnerbg);
 
-        adapterData = new AdapterData(measures, ActivityHome.this);
+        adapterData = new DataAdapter(measures, HomeActivity.this);
 
         ml = findViewById(R.id.measures_list);
         btnAdd = findViewById(R.id.btnAddMeasure);
@@ -105,15 +87,17 @@ public class ActivityHome extends AppCompatActivity {
         btnSendData = findViewById(R.id.btnSendData);
         btnCloseRequest = findViewById(R.id.close_request);
 
-        session = PreferenceManager.getDefaultSharedPreferences(ActivityHome.this);
+        session = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
         doctorUsername = session.getString("doctorUsernamePref", "");
-        savedPubKey = "MCowBQYDK2VwAyEAt75fQ6Ji2Aq9VcdkeqS/2XppuXouSRPUd/Vj8R5T2yk=";//session.getString("pubKeyPref", "");  <---change to this
+        savedPubKey = "MCowBQYDK2VwAyEAt75fQ6Ji2Aq9VcdkeqS/2XppuXouSRPUd/Vj8R5T2yk=";
+        //TODO change the key to the shared pref
+        //session.getString("pubKeyPref", "");  <---change to this
         savedUsername = session.getString("usernamePref", "");
         token = session.getString("tokenPref", "");
 
         //check if the user is logged in
         if (savedUsername.equals("")){
-            Intent intentLogin = new Intent(ActivityHome.this, ActivityLogin.class);
+            Intent intentLogin = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intentLogin);
             finish();
         } else {
@@ -125,7 +109,7 @@ public class ActivityHome extends AppCompatActivity {
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentSettings = new Intent(getApplicationContext(), ActivitySettings.class);
+                Intent intentSettings = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intentSettings);
             }
         });
@@ -134,7 +118,7 @@ public class ActivityHome extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddDialogClass cdd=new AddDialogClass(ActivityHome.this);
+                AddDialogClass cdd=new AddDialogClass(HomeActivity.this);
                 cdd.show();
             }
         });
@@ -144,7 +128,7 @@ public class ActivityHome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (savedPubKey.equals("")){
-                    Toast.makeText(ActivityHome.this,
+                    Toast.makeText(HomeActivity.this,
                             "You need to select a doctor first, go to the settings menu!",
                             Toast.LENGTH_SHORT).show();
                 } else {
@@ -156,7 +140,7 @@ public class ActivityHome extends AppCompatActivity {
                         sendData();
 
                     } catch (CryptoException ce){
-                        Toast.makeText(ActivityHome.this,
+                        Toast.makeText(HomeActivity.this,
                                 "Failed to set the public key", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -168,7 +152,7 @@ public class ActivityHome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 spinnerbg.setVisibility(View.GONE);
-                Toast.makeText(ActivityHome.this, "Request canceled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Request canceled", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -179,7 +163,7 @@ public class ActivityHome extends AppCompatActivity {
         DBSQLiteHelper database = new DBSQLiteHelper(this);
         measures.clear();
         measures = database.findAllHandler();
-        adapterData = new AdapterData(measures, ActivityHome.this);
+        adapterData = new DataAdapter(measures, HomeActivity.this);
         ml.setAdapter(adapterData);
         adapterData.notifyDataSetChanged();
         spinnerbg.setVisibility(View.GONE);
@@ -193,7 +177,7 @@ public class ActivityHome extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         spinnerbg.setVisibility(View.GONE);
-                        Toast.makeText(ActivityHome.this,
+                        Toast.makeText(HomeActivity.this,
                                 "Data sent",
                                 Toast.LENGTH_LONG).show();
                     }
@@ -203,7 +187,7 @@ public class ActivityHome extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         spinnerbg.setVisibility(View.GONE);
-                        Toast.makeText(ActivityHome.this,
+                        Toast.makeText(HomeActivity.this,
                                 error.toString(),
                                 Toast.LENGTH_SHORT).show();
                     }

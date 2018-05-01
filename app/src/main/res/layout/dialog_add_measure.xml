@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="16dp"
+    android:id="@+id/dialog_layout"
     android:orientation="vertical">
 
     <TextView
@@ -25,40 +26,50 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/in_err"
+            android:minHeight="20dp"
+            android:layout_marginBottom="2dp"
+            android:text="error"
+            android:gravity="center"
+            android:textColor="@android:color/holo_red_dark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <EditText
             android:id="@+id/in_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:hint="Type (all lowercase)" />
+            android:hint="@string/type_all_lowercase" />
 
         <EditText
             android:id="@+id/in_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:hint="Value" />
+            android:hint="@string/value" />
 
         <EditText
             android:id="@+id/in_units"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:hint="Units (all lowercase)" />
+            android:hint="@string/units_all_lowercase" />
 
         <EditText
             android:id="@+id/in_date"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Date (yyyy-mm-dd)" />
+            android:hint="@string/date_yyyy_mm_dd" />
 
         <EditText
             android:id="@+id/in_time"
             android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Time (HH:mm)" />
+            android:hint="@string/time_hh_mm" />
 
         <Button
             android:id="@+id/in_add"
@@ -67,7 +78,7 @@
             android:layout_marginLeft="5dp"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:text="Add"
+            android:text="@string/add"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold" />
     </LinearLayout>

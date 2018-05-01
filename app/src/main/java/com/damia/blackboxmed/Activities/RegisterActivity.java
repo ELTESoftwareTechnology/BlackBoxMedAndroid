@@ -26,7 +26,10 @@ import com.damia.blackboxmed.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ActivityRegister extends AppCompatActivity {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class RegisterActivity extends AppCompatActivity {
 
     StringRequest postRequest;
 
@@ -70,7 +73,7 @@ public class ActivityRegister extends AppCompatActivity {
 
         btnGoToLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intentSignUP = new Intent(getApplicationContext(), ActivityLogin.class);
+                Intent intentSignUP = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentSignUP);
             }
         });
@@ -87,7 +90,10 @@ public class ActivityRegister extends AppCompatActivity {
                 if(email.equals("")||password.equals("")||name.equals("")
                         ||surname.equals("")||username.equals(""))
                 {
-                    Toast.makeText(ActivityRegister.this, R.string.no_fields, Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, R.string.no_fields, Toast.LENGTH_LONG).show();
+                    return;
+                } else if(isEmailValid(email)) {
+                    Toast.makeText(RegisterActivity.this,"Email not valid", Toast.LENGTH_LONG).show();
                     return;
                 } else {
                     spinnerbg.setVisibility(View.VISIBLE);
@@ -106,15 +112,16 @@ public class ActivityRegister extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    session = PreferenceManager.getDefaultSharedPreferences(ActivityRegister.this);
+                                    session = PreferenceManager.getDefaultSharedPreferences(RegisterActivity.this);
                                     SharedPreferences.Editor editor = session.edit();
                                     editor.putString("usernamePref", username);
                                     editor.putString("tokenPref", token);
+                                    editor.apply();
                                     editor.commit();
 
                                     User user = new User(username, token);
 
-                                    Intent intent = new Intent(ActivityRegister.this, ActivityHome.class);
+                                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
                                     startActivity(intent);
 
                                 }
@@ -123,7 +130,7 @@ public class ActivityRegister extends AppCompatActivity {
                             {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(ActivityRegister.this, error.toString(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
                                     System.out.println(error);
                                     spinnerbg.setVisibility(View.GONE);
                                     btnRegister.setClickable(true);
@@ -163,9 +170,17 @@ public class ActivityRegister extends AppCompatActivity {
                 spinnerbg.setVisibility(View.GONE);
                 btnRegister.setClickable(true);
 
-                Toast.makeText(ActivityRegister.this, R.string.canceled_request, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, R.string.canceled_request, Toast.LENGTH_SHORT).show();
             }
 
         });
+    }
+
+    public static boolean isEmailValid(CharSequence email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

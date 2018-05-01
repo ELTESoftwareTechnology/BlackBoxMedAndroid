@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activities.ActivityHome"
+    tools:context=".Activities.HomeActivity"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#f0ece7"
     android:layout_width="match_parent"

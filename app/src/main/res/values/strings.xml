@@ -23,4 +23,10 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="not_registered_do_it_here">Not registered? Do it here!</string>
+    <string name="type_all_lowercase">Type (all lowercase)</string>
+    <string name="value">Value</string>
+    <string name="units_all_lowercase">Units (all lowercase)</string>
+    <string name="date_yyyy_mm_dd">Date (yyyy-mm-dd)</string>
+    <string name="time_hh_mm">Time (HH:mm)</string>
+    <string name="add">Add</string>
 </resources>

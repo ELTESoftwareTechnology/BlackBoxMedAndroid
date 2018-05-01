@@ -11,11 +11,11 @@ import com.damia.blackboxmed.R;
 
 import java.util.ArrayList;
 
-public class AdapterDoctors extends BaseAdapter {
+public class DoctorsAdapter extends BaseAdapter {
     private ArrayList<Doctor> postList=null;
     private Context context=null;
 
-    public AdapterDoctors(ArrayList<Doctor> postList, Context context)
+    public DoctorsAdapter(ArrayList<Doctor> postList, Context context)
     {
         this.postList=postList;
         this.context=context;

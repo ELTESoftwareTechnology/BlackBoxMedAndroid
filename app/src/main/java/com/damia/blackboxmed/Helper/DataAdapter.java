@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class AdapterData extends BaseAdapter {
+public class DataAdapter extends BaseAdapter {
     private ArrayList<Measurement> postList=null;
     private Context context=null;
 
 
-    public AdapterData(ArrayList<Measurement> postList, Context context)
+    public DataAdapter(ArrayList<Measurement> postList, Context context)
     {
         this.postList=postList;
         this.context=context;
