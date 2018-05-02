@@ -65,8 +65,7 @@ public class Measurement implements Serializable{
         this.value = value;
     }
 
-    public String toJSON() {
-
+    public JSONObject toJSON() {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("type", getType());
@@ -74,11 +73,11 @@ public class Measurement implements Serializable{
             jsonObject.put("value", getValue());
             jsonObject.put("createdAt", getCreatedAt());
             System.out.println(jsonObject.toString());
-            return jsonObject.toString();
+            return jsonObject;
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return "";
+            return new JSONObject();
         }
     }
 }

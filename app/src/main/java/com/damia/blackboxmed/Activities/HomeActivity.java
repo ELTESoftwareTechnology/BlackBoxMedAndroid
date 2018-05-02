@@ -28,7 +28,11 @@ import com.virgilsecurity.sdk.crypto.VirgilCrypto;
 import com.virgilsecurity.sdk.crypto.VirgilPublicKey;
 import com.virgilsecurity.sdk.crypto.exceptions.CryptoException;
 import com.virgilsecurity.sdk.crypto.exceptions.EncryptionException;
+import com.virgilsecurity.sdk.utils.Base64;
 import com.virgilsecurity.sdk.utils.ConvertionUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,9 +93,7 @@ public class HomeActivity extends AppCompatActivity {
 
         session = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
         doctorUsername = session.getString("doctorUsernamePref", "");
-        savedPubKey = "MCowBQYDK2VwAyEAt75fQ6Ji2Aq9VcdkeqS/2XppuXouSRPUd/Vj8R5T2yk=";
-        //TODO change the key to the shared pref
-        //session.getString("pubKeyPref", "");  <---change to this
+        savedPubKey = session.getString("pubKeyPref", "");
         savedUsername = session.getString("usernamePref", "");
         token = session.getString("tokenPref", "");
 
@@ -236,34 +238,29 @@ public class HomeActivity extends AppCompatActivity {
 
     //get measures and structure the json to send
     public String encryptAndParseData (ArrayList<Measurement> measurements) {
-        String start = "{ \"targetUsername\":\""+doctorUsername+"\",";
-        String me_start = "\"encryptedData\":\"";
-        String content = "";
-        String full_content;
-
         //creates an array list of strings that contains the measurements data
+        JSONObject bundledJson = new JSONObject();
+        JSONArray measurementsJson = new JSONArray();
         for(Measurement m : measurements){
-            String objToString = m.toJSON();
-            convertedMeasures.add(objToString);
+            measurementsJson.put(m.toJSON());
         }
-        //turn is into a string adding commas
-        String string_convertedMeasures = TextUtils.join(", ", convertedMeasures);
 
-        //encrypt, convert it to ISO-8859-1 and escape ' " ' character
         try {
-            byte[] encryptedData = (encryptData(string_convertedMeasures, pubKey));
-            String contentToEscape = new String(encryptedData, "ISO-8859-1");
-            content = escapeJsonCharacter(contentToEscape);
+            bundledJson.put("measurements", measurementsJson);
+            String dataToEncrypt = bundledJson.toString();
+            byte[] encryptedData = (encryptData(dataToEncrypt, pubKey));
+            String encryptedDataString = Base64.encode(encryptedData);
+
+            JSONObject body = new JSONObject();
+            body.put("targetUsername", doctorUsername);
+            body.put("encryptedData", encryptedDataString);
+            body.put("comment", "");
+            return body.toString();
         } catch (Exception e) {
-            
             System.err.println(e);
             System.out.println("ERROR IN encryptAndParseData");
-            
+            return "";
         }
-
-        full_content = start+me_start+content+"\", \"comment\":\"\" }";
-        System.out.println("Request body: "+full_content);
-        return full_content;
     }
 
     private VirgilPublicKey importPublicKey(String publicKey) throws CryptoException {
