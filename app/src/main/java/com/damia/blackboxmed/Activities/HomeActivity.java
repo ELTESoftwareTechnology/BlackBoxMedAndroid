@@ -98,7 +98,8 @@ public class HomeActivity extends AppCompatActivity {
         token = session.getString("tokenPref", "");
 
         //check if the user is logged in
-        if (savedUsername.equals("")){
+        if (savedUsername.equals("asd")){
+            //TODO chage back to emptyy string
             Intent intentLogin = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intentLogin);
             finish();
@@ -221,11 +222,6 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
-
-    public String escapeJsonCharacter(String jsonToEncode){
-        String encodedJson = jsonToEncode.replaceAll("\"", "\\"+"\"");
-        return encodedJson;
-    }
 
     //std encryption function
     private static byte[] encryptData (String messageToEncrypt, VirgilPublicKey receiverPublicKey)

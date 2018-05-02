@@ -75,7 +75,6 @@ public class Measurement implements Serializable{
             System.out.println(jsonObject.toString());
             return jsonObject;
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return new JSONObject();
         }

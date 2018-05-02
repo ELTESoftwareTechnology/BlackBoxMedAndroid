@@ -92,7 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                 {
                     Toast.makeText(RegisterActivity.this, R.string.no_fields, Toast.LENGTH_LONG).show();
                     return;
-                } else if(isEmailValid(email)) {
+                } else if(!isEmailValid(email)) {
                     Toast.makeText(RegisterActivity.this,"Email not valid", Toast.LENGTH_LONG).show();
                     return;
                 } else {

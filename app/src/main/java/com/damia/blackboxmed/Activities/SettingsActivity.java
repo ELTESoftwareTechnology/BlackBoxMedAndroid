@@ -169,6 +169,7 @@ public class SettingsActivity extends AppCompatActivity {
                 {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        spinnerbg.setVisibility(View.GONE);
                         System.err.println(error);
                     }
                 }

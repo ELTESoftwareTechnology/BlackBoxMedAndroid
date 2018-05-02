@@ -67,11 +67,11 @@ public class AddDialogClass extends Dialog {
 
                     in_err.setText("Please fill all the fields");
 
-                }   else if(!date.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})")) {
+                }   else if(!validateDateFormat(date)) {
 
                     in_err.setText("Invalid date format, yyyy-mm-dd");
 
-                }   else if(!time.matches("([0-9]{2}):([0-9]{2})")) {
+                }   else if(!validateTimeFormat(time)) {
 
                     in_err.setText("Invalid time format, HH:mm");
 
@@ -96,5 +96,12 @@ public class AddDialogClass extends Dialog {
             }
         });
 
+    }
+
+    public static boolean validateTimeFormat(String time){
+        return time.matches("([0-9]{2}):([0-9]{2})");
+    }
+    public static boolean validateDateFormat(String date){
+        return date.matches("([0-9]{4})-([0-9]{2})-([0-9]{2})");
     }
 }
