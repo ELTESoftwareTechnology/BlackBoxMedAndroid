@@ -20,11 +20,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.damia.blackboxmed.Helper.User;
 import com.damia.blackboxmed.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -110,8 +110,6 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.apply();
                                         editor.commit();
 
-                                        User user = new User(username, token);
-
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         startActivity(intent);
 
@@ -121,9 +119,26 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    //String err = error.sub
-                                    Toast.makeText(LoginActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                                    System.out.println(error);
+                                    String body = "";
+                                    String err_r;
+                                    String msg_r;
+
+
+
+                                    if(error.networkResponse.data!=null) {
+                                        try {
+                                            body = new String(error.networkResponse.data,"UTF-8");
+                                            JSONObject jo = new JSONObject(body);
+                                            err_r = jo.getString("error");
+                                            msg_r = jo.getString("message");
+                                            System.out.println("Error "+error.networkResponse.statusCode+", "+err_r+"!  "+msg_r) ;
+                                            Toast.makeText(LoginActivity.this, err_r+"! "+msg_r, Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+
                                     spinnerbg.setVisibility(View.GONE);
                                     btnLogin.setClickable(true);
                                 }

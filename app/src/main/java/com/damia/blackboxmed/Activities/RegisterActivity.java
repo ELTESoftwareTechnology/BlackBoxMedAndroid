@@ -20,7 +20,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.damia.blackboxmed.Helper.User;
 import com.damia.blackboxmed.R;
 
 import org.json.JSONException;
@@ -109,29 +108,47 @@ public class RegisterActivity extends AppCompatActivity {
                                     try {
                                         JSONObject jsonResponse = new JSONObject(response);
                                         token = jsonResponse.getString("token");
+
+                                        session = PreferenceManager.getDefaultSharedPreferences(RegisterActivity.this);
+                                        SharedPreferences.Editor editor = session.edit();
+                                        System.out.println("username is: "+username+", token: "+token);
+                                        editor.putString("usernamePref", username);
+                                        editor.putString("tokenPref", token);
+                                        editor.apply();
+                                        editor.commit();
+
+                                        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-                                    session = PreferenceManager.getDefaultSharedPreferences(RegisterActivity.this);
-                                    SharedPreferences.Editor editor = session.edit();
-                                    editor.putString("usernamePref", username);
-                                    editor.putString("tokenPref", token);
-                                    editor.apply();
-                                    editor.commit();
-
-                                    User user = new User(username, token);
-
-                                    Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                                    startActivity(intent);
-
                                 }
                             },
                             new Response.ErrorListener()
                             {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(RegisterActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
-                                    System.out.println(error);
+                                    String body = "";
+                                    String err_r;
+                                    String msg_r;
+
+
+
+                                    if(error.networkResponse.data!=null) {
+                                        try {
+                                            body = new String(error.networkResponse.data,"UTF-8");
+                                            JSONObject jo = new JSONObject(body);
+                                            err_r = jo.getString("error");
+                                            msg_r = jo.getString("message");
+                                            System.out.println("Error "+error.networkResponse.statusCode+", "+err_r+"!  "+msg_r) ;
+                                            Toast.makeText(RegisterActivity.this, err_r+"! "+msg_r, Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+
+
                                     spinnerbg.setVisibility(View.GONE);
                                     btnRegister.setClickable(true);
                                 }
@@ -144,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public byte[] getBody() throws com.android.volley.AuthFailureError {
                             String str = "{\"username\":\""+username+"\",\"email\":\""+email+"\",\"password\":\""+
-                                    password+"\",\"firstName\":\""+name+"\",\"lastName\":\""+surname+"\",\"roleType\":\"ADMIN\" }";
+                                    password+"\",\"firstName\":\""+name+"\",\"lastName\":\""+surname+"\",\"roleType\":\"USER\" }";
                             System.out.println(str);
                             return str.getBytes();
                         }
@@ -155,7 +172,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     };
                     queue.add(postRequest);
-
 
                 }
 

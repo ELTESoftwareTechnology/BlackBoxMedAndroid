@@ -1,11 +1,12 @@
 package com.damia.blackboxmed.Activities;
 
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -21,7 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.damia.blackboxmed.Helper.DataAdapter;
 import com.damia.blackboxmed.Helper.AddDialogClass;
-import com.damia.blackboxmed.Helper.DBSQLiteHelper;
+import com.damia.blackboxmed.Helper.DatabaseHelper;
 import com.damia.blackboxmed.Helper.Measurement;
 import com.damia.blackboxmed.R;
 import com.virgilsecurity.sdk.crypto.VirgilCrypto;
@@ -74,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
     String token;
     String dataToSend;
 
+    AddDialogClass cdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +100,7 @@ public class HomeActivity extends AppCompatActivity {
         token = session.getString("tokenPref", "");
 
         //check if the user is logged in
-        if (savedUsername.equals("asd")){
-            //TODO chage back to emptyy string
+        if (savedUsername.equals("")){
             Intent intentLogin = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intentLogin);
             finish();
@@ -121,10 +122,21 @@ public class HomeActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddDialogClass cdd=new AddDialogClass(HomeActivity.this);
+                cdd =new AddDialogClass(HomeActivity.this);
                 cdd.show();
+
+                cdd.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        displayData();
+                        adapterData.notifyDataSetChanged();
+                    }
+                });
+
             }
         });
+
+
 
         //upload data
         btnSendData.setOnClickListener(new View.OnClickListener() {
@@ -163,9 +175,10 @@ public class HomeActivity extends AppCompatActivity {
 
     //get the data from the db to the adapter
     public void displayData(){
-        DBSQLiteHelper database = new DBSQLiteHelper(this);
+        DatabaseHelper db = new DatabaseHelper(this);
         measures.clear();
-        measures = database.findAllHandler();
+        measures = db.getAllMeasurementsByUser(savedUsername);
+
         adapterData = new DataAdapter(measures, HomeActivity.this);
         ml.setAdapter(adapterData);
         adapterData.notifyDataSetChanged();

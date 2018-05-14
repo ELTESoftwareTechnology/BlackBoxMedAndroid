@@ -26,7 +26,11 @@
     <string name="type_all_lowercase">Type (all lowercase)</string>
     <string name="value">Value</string>
     <string name="units_all_lowercase">Units (all lowercase)</string>
-    <string name="date_yyyy_mm_dd">Date (yyyy-mm-dd)</string>
+    <string name="date_yyyy_mm_dd">Date</string>
     <string name="time_hh_mm">Time (HH:mm)</string>
     <string name="add">Add</string>
+    <string name="input_err_num">Value input should be a number</string>
+    <string name="input_err_time">Invalid time format, HH:mm</string>
+    <string name="input_err_date">Invalid date format, yyyy-mm-dd</string>
+    <string name="input_err_fields">Please fill all the fields</string>
 </resources>

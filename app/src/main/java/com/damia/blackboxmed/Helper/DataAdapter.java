@@ -1,6 +1,7 @@
 package com.damia.blackboxmed.Helper;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Image;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.damia.blackboxmed.Activities.HomeActivity;
 import com.damia.blackboxmed.R;
 
 import java.text.ParseException;
@@ -85,11 +87,22 @@ public class DataAdapter extends BaseAdapter {
         btnDelete.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                final Measurement m =(Measurement) getItem(position);
 
-                DBSQLiteHelper database = new DBSQLiteHelper(context);
-                Measurement m =(Measurement) getItem(position);
-                database.deleteHandler(m.getCreatedAt());
+                new android.app.AlertDialog.Builder(context)
+                        .setTitle("Delete this measure?")
+                        .setMessage(""+m.getType().toUpperCase()+": "+m.getValue()+" "+m.getUnit())
+                        .setNegativeButton(android.R.string.no, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
+                            public void onClick(DialogInterface arg0, int arg1) {
+
+                                DatabaseHelper db = new DatabaseHelper(context);
+                                db.deleteMeasurement(m.getCreatedAt());
+                                postList.remove(m);
+                                notifyDataSetChanged();
+                            }
+                        }).create().show();
             }
         });
         return v;

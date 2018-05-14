@@ -156,7 +156,9 @@ public class SettingsActivity extends AppCompatActivity {
                                 email =  response.getJSONObject(i).getString("email");
                                 pubKey = response.getJSONObject(i).getString("publicKey");
                                 username = response.getJSONObject(i).getString("username");
+
                                 Doctor d = new Doctor(email, username, pubKey, firstName, lastName);
+                                System.out.println("doctor added: "+d);
                                 doctors.add(d);
                             }
                             dl.setAdapter(adapterDoctors);

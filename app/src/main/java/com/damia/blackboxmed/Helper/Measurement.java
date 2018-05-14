@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class Measurement implements Serializable{
 
-    int measureID;
+    int id;
     String type;
     String unit;
     int value;
@@ -16,8 +16,8 @@ public class Measurement implements Serializable{
 
     public Measurement(){}
 
-    public Measurement(int measureID, String type, String unit, int value, String createdAt){
-        this.measureID = measureID;
+    public Measurement(int id, String type, String unit, int value, String createdAt){
+        this.id = id;
         this.createdAt = createdAt;
         this.type = type;
         this.unit = unit;
@@ -31,12 +31,12 @@ public class Measurement implements Serializable{
         this.value = value;
     }
 
-    public int getMeasureID() {
-        return measureID;
+    public int getId() {
+        return id;
     }
 
-    public void setMeasureID(int measureID) {
-        this.measureID = measureID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCreatedAt() {
