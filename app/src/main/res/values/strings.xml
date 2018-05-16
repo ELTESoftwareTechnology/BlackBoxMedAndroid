@@ -27,10 +27,15 @@
     <string name="value">Value</string>
     <string name="units_all_lowercase">Units (all lowercase)</string>
     <string name="date_yyyy_mm_dd">Date</string>
-    <string name="time_hh_mm">Time (HH:mm)</string>
+    <string name="time_hh_mm">Time</string>
     <string name="add">Add</string>
     <string name="input_err_num">Value input should be a number</string>
     <string name="input_err_time">Invalid time format, HH:mm</string>
     <string name="input_err_date">Invalid date format, yyyy-mm-dd</string>
     <string name="input_err_fields">Please fill all the fields</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

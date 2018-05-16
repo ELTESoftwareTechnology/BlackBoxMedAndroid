@@ -10,18 +10,16 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.damia.blackboxmed.R;
 
 import java.util.ArrayList;
 
-public class DataAdapter extends BaseAdapter implements Filterable {
+public class FitDataAdapter extends BaseAdapter implements Filterable {
     private ArrayList<Measurement> postList=null;
     private Context context=null;
     private ArrayList<Measurement> filtList;
 
-
-    public DataAdapter(ArrayList<Measurement> postList, Context context)
+    public FitDataAdapter(ArrayList<Measurement> postList, Context context)
     {
         this.postList=postList;
         this.context=context;
@@ -55,7 +53,6 @@ public class DataAdapter extends BaseAdapter implements Filterable {
             return filtList.get(position);
         }
     }
-
     @Override
     public long getItemId(int position)
     {
@@ -75,14 +72,12 @@ public class DataAdapter extends BaseAdapter implements Filterable {
         TextView txtMeasure = (TextView) v.findViewById(R.id.measurement);
         TextView txtDate = (TextView) v.findViewById(R.id.date);
         TextView txtID = (TextView) v.findViewById(R.id.idField);
-        TextView txtTime = (TextView) v.findViewById(R.id.time);
         ImageButton imgRes = (ImageButton) v.findViewById(R.id.img);
 
-
         txtType.setText(p.getType());
-        String u_temp = (p.getUnit().substring(0,1).toUpperCase())+(p.getUnit().substring(1));
-        String m = " "+u_temp+": "+String.valueOf(p.getValue())+" ";
+        String m = " "+String.valueOf(p.getValue())+" "+p.getUnit()+" ";
         txtMeasure.setText(m);
+
 
         int id_img = context.getResources().getIdentifier(p.getImg_res(), null, context.getPackageName());
         imgRes.setImageResource(id_img);
@@ -96,10 +91,9 @@ public class DataAdapter extends BaseAdapter implements Filterable {
             sub12 = parts1[1];
             parts2 = sub12.split("\\.");
             sub2 = parts2[0];
-            sub2 = sub2.substring(0, 5);
 
-            txtDate.setText(sub1);
-            txtTime.setText(sub2);
+            txtDate.setText(sub1+" at "+sub2);
+
         } catch (Exception e) {
             txtDate.setText(p.getCreatedAt());
         }
@@ -128,7 +122,6 @@ public class DataAdapter extends BaseAdapter implements Filterable {
         });
         return v;
     }
-
 
     @Override
     public Filter getFilter() {

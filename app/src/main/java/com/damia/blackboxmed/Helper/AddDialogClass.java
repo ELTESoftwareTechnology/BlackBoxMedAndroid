@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.damia.blackboxmed.Activities.HomeActivity;
 import com.damia.blackboxmed.R;
 
 import java.text.SimpleDateFormat;
@@ -46,6 +45,7 @@ public class AddDialogClass extends Dialog {
     private String time;
     private String savedUsername;
     private String sm;
+    private String img_res;
 
     SharedPreferences session;
 
@@ -130,8 +130,24 @@ public class AddDialogClass extends Dialog {
                     try {
                         value_f = Integer.valueOf(value);
 
+
+                        if(type.toLowerCase().equals("distance") || type.toLowerCase().equals("steps")) {
+                            type = "Distance";
+                            img_res = "drawable/steps";
+                        } else if (type.toLowerCase().equals("weight")) {
+                            type = "Weight";
+                            img_res = "drawable/scale";
+                        } else if (type.toLowerCase().equals("heartrate") ||
+                                type.toLowerCase().equals("heart rate") ||
+                                type.toLowerCase().equals("heart-rate")) {
+                            type = "Heartrate";
+                            img_res = "drawable/heart";
+                        } else {
+                            img_res = "drawable/info";
+                        }
+
                         DatabaseHelper db = new DatabaseHelper(getContext());
-                        Measurement d = new Measurement(type, units, value_f, createdAt);
+                        Measurement d = new Measurement(type, units, value_f, createdAt, img_res);
                         db.createMeasure(d, savedUsername);
 
                         Toast.makeText(getContext(),

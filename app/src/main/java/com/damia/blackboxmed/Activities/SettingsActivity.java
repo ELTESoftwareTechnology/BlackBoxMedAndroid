@@ -6,8 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -27,6 +31,7 @@ import com.damia.blackboxmed.R;
 
 import org.json.JSONArray;
 
+import java.io.SyncFailedException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     ListView dl;
     ArrayList<Doctor> doctors;
-    private static DoctorsAdapter adapterDoctors;
+    DoctorsAdapter adapterDoctors;
 
     TextView current_doc;
     String savedToken;
@@ -48,8 +53,8 @@ public class SettingsActivity extends AppCompatActivity {
     String pubKey;
     String username;
 
+    EditText inputSearch;
     RelativeLayout spinnerbg;
-
     SharedPreferences session;
     SharedPreferences.Editor editor;
 
@@ -63,15 +68,20 @@ public class SettingsActivity extends AppCompatActivity {
         session = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
         savedToken = session.getString("tokenPref", "");
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Settings");
+        setSupportActionBar(toolbar);
+
         queue = Volley.newRequestQueue(this);
         doctors = new ArrayList<>();
+
         adapterDoctors = new DoctorsAdapter(doctors, SettingsActivity.this);
 
+        inputSearch = (EditText) findViewById(R.id.inputSearch);
         dl = findViewById(R.id.doctors_list);
         btnHome = findViewById(R.id.btnHome);
         btnLogout = findViewById(R.id.btnLogout);
         current_doc = findViewById(R.id.current_doctor);
-
 
         spinnerbg = (RelativeLayout)findViewById(R.id.spinnerbg);
         spinnerbg.setVisibility(View.VISIBLE);
@@ -79,7 +89,8 @@ public class SettingsActivity extends AppCompatActivity {
         if("".equals(session.getString("doctorNamePref", ""))){
             current_doc.setText("No doctor selected, choose one!");
         } else {
-            current_doc.setText(getString(R.string.choose_doctor)+session.getString("doctorNamePref", ""));
+            current_doc.setText(session.getString("doctorNamePref", ""));
+
         }
 
         getDoctors();
@@ -88,7 +99,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentSettings = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent intentSettings = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intentSettings);
             }
         });
@@ -122,11 +133,13 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+
         dl.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Doctor d = doctors.get(position);
 
+                ArrayList<Doctor> temp = adapterDoctors.getDocList();
+                Doctor d = temp.get(position);
 
                 SharedPreferences.Editor editor = session.edit();
                 editor.putString("pubKeyPref", d.getPublicKey());
@@ -134,9 +147,36 @@ public class SettingsActivity extends AppCompatActivity {
                 editor.putString("doctorUsernamePref", d.getUsername());
                 editor.apply();
                 editor.commit();
-                current_doc.setText(getString(R.string.choose_doctor)+" "+session.getString("doctorNamePref", ""));
+                current_doc.setText(" "+session.getString("doctorNamePref", ""));
                 Toast.makeText(SettingsActivity.this, "Doctor changed, current: "+d.getFirstName()+" "+d.getLastName(), Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                if(cs.toString().equals("")){
+                    doctors.clear();
+                    adapterDoctors = new DoctorsAdapter(doctors, SettingsActivity.this);
+                    getDoctors();
+                    adapterDoctors.notifyDataSetChanged();
+                } else {
+
+                    SettingsActivity.this.adapterDoctors.getFilter().filter(cs);
+                }
+
+            }
+
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
             }
         });
     }
@@ -158,9 +198,10 @@ public class SettingsActivity extends AppCompatActivity {
                                 username = response.getJSONObject(i).getString("username");
 
                                 Doctor d = new Doctor(email, username, pubKey, firstName, lastName);
-                                System.out.println("doctor added: "+d);
+
                                 doctors.add(d);
                             }
+
                             dl.setAdapter(adapterDoctors);
                         } catch (Exception e){
                             System.err.println(e);

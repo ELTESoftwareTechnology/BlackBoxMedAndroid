@@ -4,73 +4,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f0ece7"
-    android:weightSum="10"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".Activities.SettingsActivity">
 
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        >
 
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnHome"
+            android:src="@drawable/ic_home"
+            android:background="@android:color/transparent"
+            android:paddingRight="16dp"
+            android:layout_gravity="right"
+            />
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:orientation="vertical"
         android:weightSum="10"
-        android:layout_weight="1"
-        android:padding="8dp"
-        android:gravity="center_vertical"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/current_doctor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="8.5"
-            android:text="@string/choose_a_doctor"
-            android:textColor="@android:color/white"
-            android:divider="@android:color/transparent"
-            android:footerDividersEnabled="false"
-            android:headerDividersEnabled="false"
-            android:scrollbars="none"
-            android:animateLayoutChanges="true"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/btnHome"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.5"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/home_icon"
-            app:srcCompat="@drawable/ic_home" />
 
-    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/doctors_rl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
-        android:gravity="center_horizontal"
-        android:padding="16dp">
+        android:layout_weight="10"
+        android:gravity="center_horizontal">
         <include layout="@layout/loading_bg"/>
-        <ListView
-            android:id="@+id/doctors_list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:animateLayoutChanges="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/colorPrimary"
+                android:padding="16dp">
+                <EditText android:id="@+id/inputSearch"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_search"
+                    android:drawablePadding="8dp"
+                    android:padding="8dp"
+                    android:elevation="10dp"
+                    android:background="@drawable/slightly_round_bg"
+                    android:hint="Search doctors.."
+                    android:inputType="textVisiblePassword"/>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/doctors_list"
+                android:layout_width="fill_parent"
+                android:divider="@android:color/transparent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true" />
+        </LinearLayout>
+
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="24dp"
+            app:srcCompat="@drawable/ic_exit" />
+
+        <TextView
+            android:id="@+id/current_doctor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="24dp"
+            android:background="@drawable/rounded_bd"
+            android:elevation="10dp"
+            android:gravity="center"
+            android:hint="@string/choose_a_doctor"
+            android:padding="12dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
+            android:textSize="18sp" />
     </RelativeLayout>
 
-    <ImageButton
-        android:id="@+id/btnLogout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:padding="16dp"
-        android:background="@android:color/transparent"
-        app:srcCompat="@drawable/ic_exit"
-        />
+
+    </LinearLayout>
+
+
 </LinearLayout>

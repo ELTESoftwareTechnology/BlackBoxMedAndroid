@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -117,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         editor.apply();
                                         editor.commit();
 
-                                        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                         startActivity(intent);
 
                                     } catch (JSONException e) {
@@ -171,6 +172,10 @@ public class RegisterActivity extends AppCompatActivity {
                             return "application/json; charset=utf-8";
                         }
                     };
+                    postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                            0,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     queue.add(postRequest);
 
                 }

@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_MEASURE = "measure";
     public static final String KEY_UNITS = "units";
     public static final String KEY_CREATED_AT = "createdAt";
+    public static final String KEY_IMAGE = "imgRes";
 
     // TAGS Table - column names
     public static final String KEY_USERNAME = "username";
@@ -47,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_TYPE + " TEXT, " +
             KEY_MEASURE + " INTEGER, " +
             KEY_UNITS + " TEXT, " +
+            KEY_IMAGE + " TEXT, " +
             KEY_CREATED_AT + " TEXT" + ")";
 
     // todo_tag table create statement
@@ -85,6 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_TYPE, measure.getType());
         values.put(KEY_MEASURE, measure.getValue());
         values.put(KEY_UNITS, measure.getUnit());
+        values.put(KEY_IMAGE, measure.getImg_res());
         values.put(KEY_CREATED_AT, measure.getCreatedAt());
 
         // insert row
@@ -117,6 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         m.setType((c.getString(c.getColumnIndex(KEY_TYPE))));
         m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
         m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
+        m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
         m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
 
         return m;
@@ -139,6 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 m.setType((c.getString(c.getColumnIndex(KEY_TYPE))));
                 m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
                 m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
+                m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
                 m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
 
                 // adding to todo list
@@ -170,6 +175,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 m.setType((c.getString(c.getColumnIndex(KEY_TYPE))));
                 m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
                 m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
+                m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
                 m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
 
                 // adding to todo list

@@ -1,64 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="fill_parent"
+android:orientation="horizontal"
+android:layout_centerVertical="true"
+android:layout_height="wrap_content"
+android:background="@android:color/transparent">
+
+<LinearLayout
+    android:id="@+id/bg_post"
     android:layout_width="fill_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_centerVertical="true"
-    android:background="@android:color/transparent"
     android:layout_height="wrap_content"
-    >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:padding="8dp"
-        android:elevation="3dp"
-        android:background="@android:color/white"
-        android:layout_marginBottom="10dp"
-        android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_height="wrap_content">
+    android:weightSum="10">
 
-        <TextView
-            android:id="@+id/docName"
-            android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent"
+        android:padding="20dp"
+        android:src="@drawable/doctor" />
+
+
+        <LinearLayout
+            android:id="@+id/ll_main"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="2dp"
-            android:paddingTop="8dp"
-            android:text="name"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_centerVertical="true"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="8"
+            android:background="@drawable/bottom_border"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/docSurname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp"
-            android:paddingLeft="2dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
-            android:text="surname"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/docName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:layout_below="@id/date"
+                android:layout_marginBottom="2dp"
+                android:text="test"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/docEmail"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="type"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
 
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/docEmail"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/type"
-        android:paddingBottom="2dp"
-        android:paddingTop="5dp"
-        android:text="date"
-        android:textAlignment="center" />
-
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

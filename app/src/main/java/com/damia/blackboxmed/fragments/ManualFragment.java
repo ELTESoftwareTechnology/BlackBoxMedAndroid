@@ -1,18 +1,26 @@
-package com.damia.blackboxmed.Activities;
+package com.damia.blackboxmed.fragments;
 
-import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,8 +28,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.damia.blackboxmed.Helper.DataAdapter;
+import com.damia.blackboxmed.Activities.LoginActivity;
 import com.damia.blackboxmed.Helper.AddDialogClass;
+import com.damia.blackboxmed.Helper.DataAdapter;
 import com.damia.blackboxmed.Helper.DatabaseHelper;
 import com.damia.blackboxmed.Helper.Measurement;
 import com.damia.blackboxmed.R;
@@ -39,7 +48,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HomeActivity extends AppCompatActivity {
+public class ManualFragment extends Fragment {
 
     //shared pref variables
     SharedPreferences session;
@@ -57,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
     ImageButton btnSettings;
     ImageButton btnCloseRequest;
     ListView ml;
+    EditText inputSearch;
     DataAdapter adapterData;
     RelativeLayout spinnerbg;
 
@@ -76,24 +86,39 @@ public class HomeActivity extends AppCompatActivity {
     String dataToSend;
 
     AddDialogClass cdd;
+    View view;
+
+    public ManualFragment() {
+        // Required empty public constructor
+    }
+
+    public static FitFragment newInstance() {
+        FitFragment fragment = new FitFragment();
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
-        queue = Volley.newRequestQueue(this);
-        spinnerbg = findViewById(R.id.spinnerbg);
+    }
 
-        adapterData = new DataAdapter(measures, HomeActivity.this);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view =  inflater.inflate(R.layout.fragment_manual, container, false);
+        queue = Volley.newRequestQueue(getContext());
+        spinnerbg = view.findViewById(R.id.spinnerbg);
+        inputSearch = (EditText) getActivity().findViewById(R.id.inputSearch);
 
-        ml = findViewById(R.id.measures_list);
-        btnAdd = findViewById(R.id.btnAddMeasure);
-        btnSettings = findViewById(R.id.btnSettings);
-        btnSendData = findViewById(R.id.btnSendData);
-        btnCloseRequest = findViewById(R.id.close_request);
+        adapterData = new DataAdapter(measures, getContext());
 
-        session = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
+        ml = view.findViewById(R.id.measures_list);
+        btnAdd = view.findViewById(R.id.fab_add);
+        btnSendData = view.findViewById(R.id.fab_upload);
+        btnCloseRequest = view.findViewById(R.id.close_request);
+
+        session = PreferenceManager.getDefaultSharedPreferences(getContext());
         doctorUsername = session.getString("doctorUsernamePref", "");
         savedPubKey = session.getString("pubKeyPref", "");
         savedUsername = session.getString("usernamePref", "");
@@ -101,28 +126,20 @@ public class HomeActivity extends AppCompatActivity {
 
         //check if the user is logged in
         if (savedUsername.equals("")){
-            Intent intentLogin = new Intent(HomeActivity.this, LoginActivity.class);
+            Intent intentLogin = new Intent(getActivity(), LoginActivity.class);
             startActivity(intentLogin);
-            finish();
+            getActivity().finish();
         } else {
             displayData();
             adapterData.notifyDataSetChanged();
         }
 
-        //go to settings
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentSettings = new Intent(getApplicationContext(), SettingsActivity.class);
-                startActivity(intentSettings);
-            }
-        });
 
         //add a measurement
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cdd =new AddDialogClass(HomeActivity.this);
+                cdd =new AddDialogClass(getActivity());
                 cdd.show();
 
                 cdd.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -138,12 +155,21 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+        //close request
+        btnCloseRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinnerbg.setVisibility(View.GONE);
+                Toast.makeText(getContext(), "Request canceled", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //upload data
         btnSendData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (savedPubKey.equals("")){
-                    Toast.makeText(HomeActivity.this,
+                    Toast.makeText(getContext(),
                             "You need to select a doctor first, go to the settings menu!",
                             Toast.LENGTH_SHORT).show();
                 } else {
@@ -155,31 +181,64 @@ public class HomeActivity extends AppCompatActivity {
                         sendData();
 
                     } catch (CryptoException ce){
-                        Toast.makeText(HomeActivity.this,
+                        Toast.makeText(getContext(),
                                 "Failed to set the public key", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
 
-        //close request
-        btnCloseRequest.setOnClickListener(new View.OnClickListener() {
+        inputSearch.addTextChangedListener(new TextWatcher() {
+
             @Override
-            public void onClick(View v) {
-                spinnerbg.setVisibility(View.GONE);
-                Toast.makeText(HomeActivity.this, "Request canceled", Toast.LENGTH_SHORT).show();
+            public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
+                if(cs.toString().equals("")){
+                    measures.clear();
+                    adapterData = new DataAdapter(measures, getContext());
+                    displayData();
+                    adapterData.notifyDataSetChanged();
+                } else {
+
+                    adapterData.getFilter().filter(cs);
+                }
+
+            }
+
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
             }
         });
 
+        return view;
     }
+
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 
     //get the data from the db to the adapter
     public void displayData(){
-        DatabaseHelper db = new DatabaseHelper(this);
+        DatabaseHelper db = new DatabaseHelper(getContext());
         measures.clear();
         measures = db.getAllMeasurementsByUser(savedUsername);
 
-        adapterData = new DataAdapter(measures, HomeActivity.this);
+        adapterData = new DataAdapter(measures, getContext());
         ml.setAdapter(adapterData);
         adapterData.notifyDataSetChanged();
         spinnerbg.setVisibility(View.GONE);
@@ -193,7 +252,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         spinnerbg.setVisibility(View.GONE);
-                        Toast.makeText(HomeActivity.this,
+                        Toast.makeText(getContext(),
                                 "Data sent",
                                 Toast.LENGTH_LONG).show();
                     }
@@ -203,7 +262,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         spinnerbg.setVisibility(View.GONE);
-                        Toast.makeText(HomeActivity.this,
+                        Toast.makeText(getContext(),
                                 error.toString(),
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -231,6 +290,10 @@ public class HomeActivity extends AppCompatActivity {
                 return "application/json; charset=utf-8";
             }
         };
+        postRequest.setRetryPolicy(new DefaultRetryPolicy(
+                0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(postRequest);
 
     }
