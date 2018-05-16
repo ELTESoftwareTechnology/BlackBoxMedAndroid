@@ -147,7 +147,7 @@ public class AddDialogClass extends Dialog {
                         }
 
                         DatabaseHelper db = new DatabaseHelper(getContext());
-                        Measurement d = new Measurement(type, units, value_f, createdAt, img_res);
+                        Measurement d = new Measurement(type, units, value_f, createdAt, img_res, 0);
                         db.createMeasure(d, savedUsername);
 
                         Toast.makeText(getContext(),

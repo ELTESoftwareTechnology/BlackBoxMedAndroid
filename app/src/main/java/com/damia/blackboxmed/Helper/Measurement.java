@@ -13,6 +13,7 @@ public class Measurement implements Serializable, Comparable<Measurement>{
     int value;
     String createdAt;
     String img_res;
+    int sent;
 
 
     public Measurement(){}
@@ -32,16 +33,25 @@ public class Measurement implements Serializable, Comparable<Measurement>{
         this.value = value;
     }
 
-    public Measurement( String type, String unit, int value, String createdAt, String img_res){
+    public Measurement( String type, String unit, int value, String createdAt, String img_res, int sent){
         this.createdAt = createdAt;
         this.type = type;
         this.unit = unit;
         this.value = value;
         this.img_res = img_res;
+        this.sent = sent;
     }
 
     public int getId() {
         return id;
+    }
+
+    public int getSent() {
+        return sent;
+    }
+
+    public void setSent(int sent) {
+        this.sent = sent;
     }
 
     public void setId(int id) {

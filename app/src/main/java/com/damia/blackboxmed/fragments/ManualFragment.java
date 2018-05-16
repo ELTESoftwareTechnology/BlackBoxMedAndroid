@@ -78,6 +78,7 @@ public class ManualFragment extends Fragment {
 
     ArrayList<Measurement> measures = new ArrayList<>();
     ArrayList<String> convertedMeasures = new ArrayList<>();
+    ArrayList<Measurement> sentMeasures = new ArrayList<>();
 
     //virgil
     VirgilPublicKey pubKey;
@@ -176,9 +177,22 @@ public class ManualFragment extends Fragment {
                     spinnerbg.setVisibility(View.VISIBLE);
                     try {
                         pubKey = importPublicKey(savedPubKey);
+                        int i = 0;
+                        for(Measurement m : adapterData.getMeasList()){
+                            if(m.getSent() == 0){
+                                i=1;
+                                sentMeasures.add(m);
+                            }
+                        }
 
-                        dataToSend = encryptAndParseData(measures);
-                        sendData();
+                        if(i==0){
+                            spinnerbg.setVisibility(View.GONE);
+                            Toast.makeText(getContext(),
+                                    "No new data to send", Toast.LENGTH_SHORT).show();
+                        } else {
+                            dataToSend = encryptAndParseData(sentMeasures);
+                            sendData();
+                        }
 
                     } catch (CryptoException ce){
                         Toast.makeText(getContext(),
@@ -255,6 +269,13 @@ public class ManualFragment extends Fragment {
                         Toast.makeText(getContext(),
                                 "Data sent",
                                 Toast.LENGTH_LONG).show();
+
+
+                        DatabaseHelper db = new DatabaseHelper(getContext());
+                        for(Measurement m : sentMeasures){
+                            db.setSentMeasure( m.getCreatedAt(), m.getValue() );
+                        }
+                        displayData();
                     }
                 },
                 new Response.ErrorListener()

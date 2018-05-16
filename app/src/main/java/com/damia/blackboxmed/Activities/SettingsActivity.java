@@ -11,6 +11,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -45,6 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
     ArrayList<Doctor> doctors;
     DoctorsAdapter adapterDoctors;
 
+    CheckBox cb;
     TextView current_doc;
     String savedToken;
     String email;
@@ -82,6 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
         btnHome = findViewById(R.id.btnHome);
         btnLogout = findViewById(R.id.btnLogout);
         current_doc = findViewById(R.id.current_doctor);
+        cb = findViewById(R.id.google_fit_checkbox);
 
         spinnerbg = (RelativeLayout)findViewById(R.id.spinnerbg);
         spinnerbg.setVisibility(View.VISIBLE);
@@ -92,6 +96,29 @@ public class SettingsActivity extends AppCompatActivity {
             current_doc.setText(session.getString("doctorNamePref", ""));
 
         }
+
+        String check = session.getString("fitPref", "");
+
+        if(check.equals("0")){
+            cb.setChecked(false);
+        } else {
+            cb.setChecked(true);
+        }
+        cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                SharedPreferences.Editor editor = session.edit();
+                if(cb.isChecked()){
+                    editor.putString("fitPref", "1");
+                } else {
+                    editor.putString("fitPref", "0");
+                }
+                editor.apply();
+                editor.commit();
+            }
+        });
+
 
         getDoctors();
         adapterDoctors.notifyDataSetChanged();

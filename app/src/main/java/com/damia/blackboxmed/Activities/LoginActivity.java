@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("doctorUsernamePref", "");
                                         editor.putString("pubKeyPref", "");
                                         editor.putString("firstOpen", "0");
+                                        editor.putString("fitPref", "0");
                                         editor.apply();
                                         editor.commit();
 

@@ -35,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_UNITS = "units";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_IMAGE = "imgRes";
+    public static final String KEY_SENT = "sent";
 
     // TAGS Table - column names
     public static final String KEY_USERNAME = "username";
@@ -49,6 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_MEASURE + " INTEGER, " +
             KEY_UNITS + " TEXT, " +
             KEY_IMAGE + " TEXT, " +
+            KEY_SENT + " INTEGER, " +
             KEY_CREATED_AT + " TEXT" + ")";
 
     // todo_tag table create statement
@@ -121,10 +123,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
         m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
         m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
+        m.setSent((c.getInt(c.getColumnIndex(KEY_SENT))));
         m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
 
         return m;
     }
+
+    public void setSentMeasure(String createdAt, int value){
+        long measurementId = 999999999;
+        String getIdQuery = "UPDATE " + TABLE_MEASUREMENTS + " SET "+ KEY_SENT + " = '" + 1 +
+                "' WHERE " + KEY_CREATED_AT + " = '" + createdAt + "' AND " + KEY_MEASURE +
+                " = '" + value + "'";
+        SQLiteDatabase dbw = this.getWritableDatabase();
+        dbw.execSQL(getIdQuery);
+    }
+
 
     public List<Measurement> getAllMeasurements() {
         List<Measurement> measures = new ArrayList<Measurement>();
@@ -144,6 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
                 m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
                 m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
+                m.setSent((c.getInt(c.getColumnIndex(KEY_SENT))));
                 m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
 
                 // adding to todo list
@@ -176,6 +190,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
                 m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
                 m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
+                m.setSent((c.getInt(c.getColumnIndex(KEY_SENT))));
+                m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
+
+                // adding to todo list
+                measures.add(m);
+            } while (c.moveToNext());
+        }
+
+        return measures;
+    }
+
+    public ArrayList<Measurement> getAllUnsentMeasurementsByUser() {
+        ArrayList<Measurement> measures = new ArrayList<Measurement>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_MEASUREMENTS + " tm, "
+                + TABLE_LINK + " tl WHERE tl."
+                + KEY_SENT + " = '" + 0 + "'" +
+                " AND tm." + KEY_ID + " = " + "tl." + KEY_MEASUREMENT_ID;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                Measurement m = new Measurement();
+                m.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+                m.setType((c.getString(c.getColumnIndex(KEY_TYPE))));
+                m.setUnit((c.getString(c.getColumnIndex(KEY_UNITS))));
+                m.setValue((c.getInt(c.getColumnIndex(KEY_MEASURE))));
+                m.setImg_res((c.getString(c.getColumnIndex(KEY_IMAGE))));
+                m.setSent((c.getInt(c.getColumnIndex(KEY_SENT))));
                 m.setCreatedAt((c.getString(c.getColumnIndex(KEY_CREATED_AT))));
 
                 // adding to todo list

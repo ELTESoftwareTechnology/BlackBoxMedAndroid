@@ -423,7 +423,7 @@ public class FitFragment extends Fragment {
             }
         }
 
-        Measurement m = new Measurement(type, unit, value, date, img_res);
+        Measurement m = new Measurement(type, unit, value, date, img_res, 0);
 
         System.out.println(m.toJSON());
         measures.add(m);
@@ -442,6 +442,8 @@ public class FitFragment extends Fragment {
                         Toast.makeText(getContext(),
                                 "Data sent",
                                 Toast.LENGTH_LONG).show();
+
+
                     }
                 },
                 new Response.ErrorListener()

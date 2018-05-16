@@ -1,6 +1,8 @@
 package com.damia.blackboxmed.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -23,7 +25,7 @@ import com.damia.blackboxmed.Helper.PagerAdapter;
 public class MainActivity extends AppCompatActivity {
 
     FragmentPagerAdapter adapterViewPager;
-
+    SharedPreferences session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +39,16 @@ public class MainActivity extends AppCompatActivity {
 
         ImageButton btnSettings = findViewById(R.id.btnSettings);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.view_pager_tab);
-        tabLayout.addTab(tabLayout.newTab().setText("Personal Data"));
-        tabLayout.addTab(tabLayout.newTab().setText("Google Fit"));
+
+        session = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String check = session.getString("fitPref", "");
+
+        if(check.equals("0")){
+            tabLayout.addTab(tabLayout.newTab().setText("Personal Data"));
+        } else {
+            tabLayout.addTab(tabLayout.newTab().setText("Personal Data"));
+            tabLayout.addTab(tabLayout.newTab().setText("Google Fit"));
+        }
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
